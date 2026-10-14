@@ -1936,6 +1936,11 @@ const Sound = {
     this.bus.connect(dry).connect(this.master);
     this.bus.connect(rev).connect(wet).connect(this.master);
     this.apply();
+
+    this.song = new Audio("Love.mp3");
+    this.song.loop = true;
+    ctx.createMediaElementSource(this.song).connect(this.master);
+    this.song.play().catch(() => {});
   },
   apply() {
     if (!this.ctx) return;
@@ -1945,6 +1950,7 @@ const Sound = {
     g.linearRampToValueAtTime(settings.sound ? 0.2 : 0, now + 1.2);
   },
   pad(notes) {
+    if (this.song) return;
     if (!this.ctx || !notes) return;
     const ctx = this.ctx, now = ctx.currentTime;
     const out = ctx.createGain(); out.gain.setValueAtTime(0, now); out.gain.linearRampToValueAtTime(1, now + 5);
